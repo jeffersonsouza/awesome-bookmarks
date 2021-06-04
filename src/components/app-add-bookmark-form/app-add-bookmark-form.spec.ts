@@ -1,7 +1,7 @@
-import { AppAddBookmarkForm } from './app-profile';
+import { AppAddBookmarkForm } from './app-add-bookmark-form';
 import { newSpecPage } from '@stencil/core/testing';
 
-describe('app-profile', () => {
+describe('app-add-bookmark-form', () => {
   describe('normalization', () => {
     it('returns a blank string if the name is undefined', async () => {
       const { rootInstance } = await newSpecPage({

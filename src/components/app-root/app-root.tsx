@@ -1,4 +1,6 @@
 import { Component, h } from '@stencil/core';
+import { store } from '@stencil/redux';
+import { configureStore } from '../../store/index';
 
 @Component({
   tag: 'app-root',
@@ -6,6 +8,10 @@ import { Component, h } from '@stencil/core';
   shadow: true,
 })
 export class AppRoot {
+  componentWillLoad() {
+    store.setStore(configureStore({}));
+  }
+
   render() {
     return (
       <div class="container">

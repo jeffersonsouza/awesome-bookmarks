@@ -22,7 +22,8 @@ export class AppAddBookmarkForm {
 
   async addBookmark(event) {
     event.preventDefault();
-    const bookmark = await BookmarksService.create(this.formControls);
+    await BookmarksService.create(this.formControls);
+    this.formControls = { name: null, link: null, tags: null };
   }
 
   render() {

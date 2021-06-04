@@ -1,21 +1,46 @@
 {
   "bookmarks": [
     {
-      "tags": "",
-      "id": "e6j",
-      "createdAt": 1622388243342
-    },
-    {
-      "tags": "",
-      "id": "jdm",
-      "createdAt": 1622388364638
-    },
-    {
       "name": "Apple",
       "link": "https://apple.com",
       "tags": "mac, ios, apple",
       "id": "rho91",
       "createdAt": 1622389115614
+    },
+    {
+      "name": "1 & 1",
+      "link": "https://1und1.de",
+      "tags": "internet, providers",
+      "id": "3sxzof",
+      "createdAt": 1622407751524
+    },
+    {
+      "name": "Google",
+      "link": "https://google.com",
+      "tags": "search, media",
+      "id": "1usg8x",
+      "createdAt": 1622820960538
+    },
+    {
+      "name": "The Local",
+      "link": "https://thelocal.de",
+      "tags": "news, germany",
+      "id": "t24c4r",
+      "createdAt": 1622825669774
+    },
+    {
+      "name": "Nintendo",
+      "link": "https://nintendo.com",
+      "tags": "games",
+      "id": "59r6lb",
+      "createdAt": 1622826088098
+    },
+    {
+      "name": "Microsoft",
+      "link": "https://microsoft.com",
+      "tags": "windows, os",
+      "id": "pxgv6nh",
+      "createdAt": 1622826240723
     }
   ]
 }

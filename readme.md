@@ -1,41 +1,38 @@
-# Stencil App Starter
+# Bookmarks Manager
 
-Stencil is a compiler for building fast web apps using Web Components.
+## The Task
 
-Stencil combines the best concepts of the most popular frontend frameworks into a compile-time rather than run-time tool.  Stencil takes TypeScript, JSX, a tiny virtual DOM layer, efficient one-way data binding, an asynchronous rendering pipeline (similar to React Fiber), and lazy-loading out of the box, and generates 100% standards-based Web Components that run in any browser supporting the Custom Elements v1 spec.
+#### Functional requirements
+Create an application that allows the user to manage bookmarks. They should be able to enter a name, link (URL) and a list of tags separated by comma.
+The bookmarks should be displayed from the newest entries to the oldest ones. Users should be also able to filter bookmarks based on tags and delete bookmarks.
+Here is a wireframe as a rough guide.
 
-Stencil components are just Web Components, so they work in any major framework or with no framework at all. In many cases, Stencil can be used as a drop in replacement for traditional frontend frameworks given the capabilities now available in the browser, though using it as such is certainly not required.
+![wireframe](wireframe.png)
 
-Stencil also enables a number of key capabilities on top of Web Components, in particular Server Side Rendering (SSR) without the need to run a headless browser, pre-rendering, and objects-as-properties (instead of just strings).
+#### Non-functional requirements
+- Make sure you write tests for some of the developed code. 
+- Optional:
+  - Keep the data persistent on browser reload.
+  - Create a new service to load an initial set of bookmarks from a real server (iE. locally served JSON file) via HTTP.
 
-## Getting Started
+## How to Run
 
-To start a new project using Stencil, clone this repo to a new directory:
-
-```bash
-npm init stencil app
-```
-
-and run:
+To run main application you can open a terminal window and run:
 
 ```bash
 npm start
 ```
-
-To build the app for production, run:
-
+I used [JSON Server](https://github.com/typicode/json-server) to create the "API" side. 
+It should also be started in order to properly run the application. You need a new window and to 
+run the command:  
 ```bash
-npm run build
+npm start:mock
 ```
+
+
 
 To run the unit tests once, run:
 
 ```
 npm test
-```
-
-To run the unit tests and watch for file changes during development, run:
-
-```
-npm run test.watch
 ```

@@ -1,7 +1,10 @@
+import { Actions } from '../actions';
 import { environment } from '../global/environment';
 import { Bookmark } from '../types/bookmark';
+import { store } from '@stencil/redux';
 
 class BookmarksService {
+
   /**
    * @type {string}
    * @private
@@ -20,6 +23,22 @@ class BookmarksService {
     'Content-Type': 'application/json'
   };
 
+  private storeInstance;
+
+  private bookmarks: Bookmark[] = [];
+
+  constructor() {
+    this.storeInstance = store.getStore();
+  }
+
+  private resetBookmarks(): void {
+    this.bookmarks = [...this.storeInstance.getState().bookmarksReducer.bookmarks];
+  }
+
+  private sort(bookmarks: Bookmark[]) {
+    return bookmarks.sort((a, b) => b.createdAt - a.createdAt)
+  }
+
   /**
    * Get the bookmarks list
    *
@@ -29,35 +48,57 @@ class BookmarksService {
   getAll(): Promise<Bookmark[]> {
     return new Promise(async (resolve, reject) => {
       try {
+        this.storeInstance.dispatch({
+          type: Actions.LOAD_BOOKMARKS_BEGIN
+        });
+
         let response = await fetch(this.resourceEndpoint, { headers: this.headers });
-        let json = await response.json() as Bookmark[];
-        console.log(json);
-        resolve(json);
-      } catch (e) {
-        console.log(e);
-        reject(e);
+        let data = await response.json() as Bookmark[];
+        data = this.sort(data);
+
+        this.storeInstance.dispatch({
+          type: Actions.LOAD_BOOKMARKS_SUCCESS,
+          payload: data
+        });
+
+        this.resetBookmarks();
+        resolve(data);
+      } catch (error) {
+        this.storeInstance.dispatch({
+          type: Actions.LOAD_BOOKMARKS_FAILURE,
+          payload: error
+        });
+        reject(error);
       }
     });
   }
 
-  create(data: Bookmark): Promise<Bookmark> {
+  /**
+   * Create new Bookmark
+   *
+   * @param {Bookmark} bookmark
+   * @returns {Promise<Bookmark>}
+   */
+  create(bookmark: Bookmark): Promise<Bookmark> {
     return new Promise(async (resolve, reject) => {
       try {
         // set id and created date
-        data.id = Math.random().toString(36).substring(7);
-        data.createdAt = (new Date()).getTime();
+        bookmark.id = Math.random().toString(36).substring(7);
+        bookmark.createdAt = (new Date()).getTime();
 
-        // perform API request
-        let response = await fetch(this.resourceEndpoint, {
+        await fetch(this.resourceEndpoint, {
           method: 'POST',
-          body: JSON.stringify(data),
+          body: JSON.stringify(bookmark),
           headers: this.headers,
         });
 
-        let json = await response.json();
+        this.storeInstance.dispatch({
+          type: Actions.CREATE_BOOKMARK,
+          payload: bookmark
+        });
 
-        console.log(json);
-        resolve(data);
+        this.resetBookmarks();
+        resolve(bookmark);
       } catch (e) {
         console.log(e);
         reject(e);
@@ -65,23 +106,57 @@ class BookmarksService {
     });
   }
 
+  /**
+   * Delete a bookmark with given ID
+   * @param {string} id
+   * @returns {Promise<null>}
+   */
   delete(id: string): Promise<null> {
     return new Promise(async (resolve, reject) => {
       try {
-        let response = await fetch(`${this.resourceEndpoint}/${id}`, {
+        await fetch(`${this.resourceEndpoint}/${id}`, {
           method: 'DELETE',
           headers: this.headers,
         });
 
-        let json = await response.json();
+        this.storeInstance.dispatch({
+          type: Actions.DELETE_BOOKMARK,
+          payload: id
+        });
 
-        console.log(json);
+        this.resetBookmarks();
         resolve(null);
       } catch (e) {
         console.log(e);
         reject(e);
       }
     });
+  }
+
+  /**
+   * Search bookmarks by tags filtering by given term
+   *
+   * @param {string} term
+   */
+  search(term: string): void {
+    try {
+      if(!term) {
+        this.storeInstance.dispatch({
+          type: Actions.LOAD_BOOKMARKS_SUCCESS,
+          payload: this.bookmarks,
+        });
+      }
+
+      const bookmarks = this.bookmarks.filter((bookmark) => bookmark.tags.search(term) > -1);
+      this.storeInstance.dispatch({
+        type: Actions.SEARCH_BOOKMARKS,
+        payload: bookmarks,
+      });
+
+      return;
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
