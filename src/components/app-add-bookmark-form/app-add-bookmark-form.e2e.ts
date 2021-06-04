@@ -1,20 +1,30 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('app-profile', () => {
+describe('app-add-bookmark-form', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<app-profile></app-profile>');
+    await page.setContent('<app-add-bookmark-form></app-add-bookmark-form>');
 
-    const element = await page.find('app-profile');
+    const element = await page.find('app-add-bookmark-form');
     expect(element).toHaveClass('hydrated');
   });
 
-  it('displays the specified name', async () => {
-    const page = await newE2EPage({ url: '/profile/joseph' });
+  it('create new entry', async () => {
+    const page = await newE2EPage();
+    await page.setContent('<app-add-bookmark-form></app-add-bookmark-form>');
 
-    const profileElement = await page.find('app-root >>> app-profile');
-    const element = profileElement.shadowRoot.querySelector('div');
-    expect(element.textContent).toContain('Hello! My name is Joseph.');
+    const bookmarkForm = await page.find('app-add-bookmark-form');
+    const bookmarkFormElement = bookmarkForm.shadowRoot;
+
+
+    // set input fields
+    bookmarkFormElement.querySelector('#name').setAttribute('value', 'United Internet Media');
+    bookmarkFormElement.querySelector('#link').setAttribute('value', 'https://united-internet.de');
+    bookmarkFormElement.querySelector('#tags').setAttribute('value', 'united, internet, media');
+    bookmarkFormElement.querySelector('button').click();
+    await page.waitForChanges();
+
+    expect(true).toBeTruthy();
   });
 
   // it('includes a div with the class "app-profile"', async () => {

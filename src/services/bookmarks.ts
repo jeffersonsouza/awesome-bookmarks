@@ -147,7 +147,7 @@ class BookmarksService {
         });
       }
 
-      const bookmarks = this.bookmarks.filter((bookmark) => bookmark.tags.search(term) > -1);
+      const bookmarks = this.bookmarks.filter((bookmark) => bookmark.tags.toLowerCase().search(term) > -1);
       this.storeInstance.dispatch({
         type: Actions.SEARCH_BOOKMARKS,
         payload: bookmarks,
